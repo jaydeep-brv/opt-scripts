@@ -46,9 +46,9 @@ fi
 
 display "Target user: $TARGET_USER | Home directory: $HOME_DIR"
 # Create a temporary directory for downloads
-TMP_DIR=$(mktemp -d)
-trap 'rm -rf "$TMP_DIR"' EXIT
-pushd "$TMP_DIR" > /dev/null
+# TMP_DIR=$(mktemp -d)
+# trap 'rm -rf "$TMP_DIR"' EXIT
+# pushd "$TMP_DIR" > /dev/null
 
 # Download deployment scripts
 display "Downloading the deployment scripts"
@@ -77,11 +77,11 @@ log "deploying Heartbeat"
 # ./deploy-heartbeat.sh "$KEY" "$SECRET"
 log "deployment completed"
 
-popd > /dev/null
+# popd > /dev/null
 
 # Cleanup downloaded scripts
-display "Cleaning up downloaded scripts"
-rm -rf "$TMP_DIR"
+# display "Cleaning up downloaded scripts"
+# rm -rf "$TMP_DIR"
 
 # Verification
 display "Verifying the deployment"
