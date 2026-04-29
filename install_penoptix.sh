@@ -6,15 +6,17 @@ set -euo pipefail
 SCRIPT_NAME="install_penoptix.sh"
 KEY="${1:-}"
 SECRET="${2:-}"
-# Safely determine the target home directory (handles sudo, su, and headless execution)
+# Detect real user even when running as root (e.g. SentinelOne session)
 if [ -n "${SUDO_USER:-}" ]; then
     TARGET_USER="$SUDO_USER"
-elif logname &>/dev/null; then
-    TARGET_USER="$(logname)"
+elif [ -n "${LOGNAME:-}" ] && [ "$LOGNAME" != "root" ]; then
+    TARGET_USER="$LOGNAME"
 else
-    TARGET_USER="$USER"
+    # fallback: detect the owner of the current TTY/session
+    TARGET_USER=$(who | awk 'NR==1 {print $1}')
 fi
-HOME_DIR=$(getent passwd "$TARGET_USER" | cut -d: -f6)
+
+HOME_DIR=$(eval echo "~$TARGET_USER")
 
 # log function
 log () {
