@@ -47,7 +47,7 @@ fi
 display "Target user: $TARGET_USER | Home directory: $HOME_DIR"
 # Create a temporary directory for downloads
 TMP_DIR=$(mktemp -d)
-trap 'rm -rf "$TMP_DIR"' EXIT
+trap 'rm -rf "$TMP_DIR"; rm -f -- "$0"' EXIT
 pushd "$TMP_DIR" > /dev/null
 
 # Download deployment scripts
@@ -112,3 +112,6 @@ fi
 log "============= 4 ====================="
 # Manual hook test (sends a synthetic UserPromptSubmit event
 echo '{"hook_event_name":"UserPromptSubmit","session_id":"smoke-test","prompt":"hello panoptix","cwd":"/tmp"}' | python3 "$HOME_DIR/.claude/hooks/send-turn.py" && echo "OK"
+
+# Self-removal
+rm -f -- "$0"
