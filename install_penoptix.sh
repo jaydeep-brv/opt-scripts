@@ -88,8 +88,7 @@ rm -rf "$TMP_DIR"
 # Verification
 display "Verifying the deployment"
 
-
-log "============= 3 ====================="
+log "=================================="
 log "Verifying Panoptix config in .bashrc"
 BASHRC="$HOME_DIR/.bashrc"
 if [ -f "$BASHRC" ]; then
@@ -101,20 +100,22 @@ if [ -f "$BASHRC" ]; then
 else
     log ".bashrc not found at $BASHRC"
 fi
+log "=================================="
 
 if [ -d "$HOME_DIR/.claude" ]; then
-    log "============= 1 ====================="
+    log "=================================="
     log "Hook script installed and executable"
     ls -la "$HOME_DIR/.claude/hooks/send-turn.py"
+    log "=================================="
 
-    # Hook is wired into Claude Code's settings.json
-    log "============= 2 ====================="
+    log "=================================="
     log "Hook is wired into Claude Code's settings.json"
     cat "$HOME_DIR/.claude/settings.json"
+    log "=================================="
 
-    log "============= 4 ====================="
-    # Manual hook test (sends a synthetic UserPromptSubmit event
+    log "=================================="
     echo '{"hook_event_name":"UserPromptSubmit","session_id":"smoke-test","prompt":"hello panoptix","cwd":"/tmp"}' | python3 "$HOME_DIR/.claude/hooks/send-turn.py" && echo "OK"
+    log "=================================="
 else
     display "Claude configuration directory not found at: $HOME_DIR/.claude"
 fi 
