@@ -88,15 +88,6 @@ rm -rf "$TMP_DIR"
 # Verification
 display "Verifying the deployment"
 
-log "============= 1 ====================="
-log "Hook script installed and executable"
-ls -la "$HOME_DIR/.claude/hooks/send-turn.py"
-
-# Hook is wired into Claude Code's settings.json
-log "============= 2 ====================="
-log "Hook is wired into Claude Code's settings.json"
-cat "$HOME_DIR/.claude/settings.json"
-
 
 log "============= 3 ====================="
 log "Verifying Panoptix config in .bashrc"
@@ -111,9 +102,22 @@ else
     log ".bashrc not found at $BASHRC"
 fi
 
-log "============= 4 ====================="
-# Manual hook test (sends a synthetic UserPromptSubmit event
-echo '{"hook_event_name":"UserPromptSubmit","session_id":"smoke-test","prompt":"hello panoptix","cwd":"/tmp"}' | python3 "$HOME_DIR/.claude/hooks/send-turn.py" && echo "OK"
+if [ -d "$HOME_DIR/.claude" ]; then
+    log "============= 1 ====================="
+    log "Hook script installed and executable"
+    ls -la "$HOME_DIR/.claude/hooks/send-turn.py"
+
+    # Hook is wired into Claude Code's settings.json
+    log "============= 2 ====================="
+    log "Hook is wired into Claude Code's settings.json"
+    cat "$HOME_DIR/.claude/settings.json"
+
+    log "============= 4 ====================="
+    # Manual hook test (sends a synthetic UserPromptSubmit event
+    echo '{"hook_event_name":"UserPromptSubmit","session_id":"smoke-test","prompt":"hello panoptix","cwd":"/tmp"}' | python3 "$HOME_DIR/.claude/hooks/send-turn.py" && echo "OK"
+else
+    display "Claude configuration directory not found at: $HOME_DIR/.claude"
+fi 
 
 # Self-removal
 rm -f -- "$0"
