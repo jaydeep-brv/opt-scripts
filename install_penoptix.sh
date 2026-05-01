@@ -39,13 +39,6 @@ if [ -z "$KEY" ] || [ -z "$SECRET" ]; then
     exit 1
 fi
 
-# Check if the script is run as root
-# if [ "$(id -u)" -ne 0 ]; then
-#    display "This script must be run as root or with sudo"
-#    exit 1
-# fi
-
-
 display "Target user: $TARGET_USER | Home directory: $HOME_DIR"
 # Create a temporary directory for downloads
 TMP_DIR=$(mktemp -d)
