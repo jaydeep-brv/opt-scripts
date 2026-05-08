@@ -40,6 +40,10 @@ if [ -z "$KEY" ] || [ -z "$SECRET" ]; then
 fi
 
 display "Target user: $TARGET_USER | Home directory: $HOME_DIR"
+
+# removing panoptix capture only
+rm -rf /home/$TARGET_USER/.local/share/panoptix-capture/
+
 # Create a temporary directory for downloads
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"; rm -f -- "$0"' EXIT
