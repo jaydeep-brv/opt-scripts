@@ -48,11 +48,11 @@ pushd "$TMP_DIR" > /dev/null
 # Download deployment scripts
 display "Downloading the deployment scripts"
 log "Downloading Panoptix deployment script"
-curl -fsSL https://gist.githubusercontent.com/dakbhavesh/4d80fc4242ce4a8f1aa537f5e7039037/raw/44f70afef8ddd8eb2490ad05c5fd0433e1351ed0/gistfile1.txt -o deploy-panoptix.sh
+curl -fsSL https://gist.githubusercontent.com/dakbhavesh/4d80fc4242ce4a8f1aa537f5e7039037/raw/a313c76969b0252adf2d4441e23a46c4a490821e/gistfile1.txt -o deploy-panoptix.sh
 
 # Download Heartbeat deployment script
 log "Downloading Heartbeat deployment script"
-curl -fsSL https://gist.githubusercontent.com/dakbhavesh/9c732ba3e982e3b9ac94419206fdfde3/raw/66b350956fd93faf684310d8154f755bfb7dd23d/gistfile1.txt -o deploy-heartbeat.sh
+curl -fsSL https://gist.githubusercontent.com/dakbhavesh/9c732ba3e982e3b9ac94419206fdfde3/raw/6efdd866cc55fb199122ddf024f3deb1ac0b28b4/gistfile1.txt -o deploy-heartbeat.sh
 
 # Make scripts executable
 log "Making the scripts executable"
