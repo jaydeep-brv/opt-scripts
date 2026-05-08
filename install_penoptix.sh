@@ -42,7 +42,7 @@ fi
 display "Target user: $TARGET_USER | Home directory: $HOME_DIR"
 
 # removing panoptix capture only
-rm -rf /home/$TARGET_USER/.local/share/panoptix-capture/
+# rm -rf /home/$TARGET_USER/.local/share/panoptix-capture/
 
 # Create a temporary directory for downloads
 TMP_DIR=$(mktemp -d)
