@@ -6,17 +6,32 @@ set -euo pipefail
 SCRIPT_NAME="install_penoptix.sh"
 KEY="${1:-}"
 SECRET="${2:-}"
-# Detect real user even when running as root (e.g. SentinelOne session)
-if [ -n "${SUDO_USER:-}" ]; then
-  TARGET_USER="$SUDO_USER"
-elif [ -n "${LOGNAME:-}" ] && [ "$LOGNAME" != "root" ]; then
-  TARGET_USER="$LOGNAME"
-else
-  # fallback: detect the owner of the current TTY/session
-  TARGET_USER=$(who | awk 'NR==1 {print $1}')
+# Detect the real user even when running as root (e.g. SentinelOne session).
+# SUDO_USER/LOGNAME can hold a bare uid there, so resolve every candidate through
+# getent and accept only a name that actually exists.
+resolve_user() {
+  local name
+  name=$(getent passwd "${1:-}" 2>/dev/null | cut -d: -f1) || true
+  case "$name" in ""|root) return 0 ;; esac
+  printf '%s' "$name"
+}
+
+CONSOLE_USER=$(who 2>/dev/null | awk 'NR==1 {print $1}' || true)
+TARGET_USER=""
+for candidate in "${TARGET_USER_OVERRIDE:-}" "${SUDO_USER:-}" "${LOGNAME:-}" "$CONSOLE_USER"; do
+  [ -n "$candidate" ] || continue
+  TARGET_USER=$(resolve_user "$candidate")
+  if [ -n "$TARGET_USER" ]; then break; fi
+done
+# last resort: first regular (uid >= 1000) account on the box
+[ -n "$TARGET_USER" ] || TARGET_USER=$(getent passwd | awk -F: '$3>=1000 && $3<65534 {print $1; exit}' || true)
+
+if [ -z "$TARGET_USER" ]; then
+  display "Could not detect the target user. Run as that user, or set TARGET_USER_OVERRIDE=<user>."
+  exit 1
 fi
 
-HOME_DIR=$(eval echo "~$TARGET_USER")
+HOME_DIR=$(getent passwd "$TARGET_USER" | cut -d: -f6)
 
 # log function
 log() {
