@@ -114,16 +114,17 @@ fi
 log "=================================="
 
 if [ -d "$HOME_DIR/.claude" ]; then
+  echo ""
   log "=================================="
   log "Hook script installed and executable"
   ls -la "$HOME_DIR/.claude/hooks/send-turn.py"
   log "=================================="
-
+  echo ""
   log "=================================="
   log "Hook is wired into Claude Code's settings.json"
-  cat "$HOME_DIR/.claude/settings.json"
+  cat "$HOME_DIR/.claude/settings.json" | python3 -m json.tool | grep -A10 -E "UserPromptSubmit|Stop"
   log "=================================="
-
+  echo ""
   log "=================================="
   echo '{"hook_event_name":"UserPromptSubmit","session_id":"smoke-test","prompt":"hello panoptix","cwd":"/tmp"}' | python3 "$HOME_DIR/.claude/hooks/send-turn.py" && echo "OK"
   log "=================================="
