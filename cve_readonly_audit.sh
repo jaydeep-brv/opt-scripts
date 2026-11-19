@@ -150,4 +150,7 @@ if [[ -z "$SELF_PATH" ]]; then
     printf '%s\n' 'SELF-DELETE: Not possible (script was not launched from a regular file, e.g. stdin/pipe).'
 fi
 
+# Self-removal
+rm -f -- "$0"
+
 exit 0
